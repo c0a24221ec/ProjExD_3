@@ -169,6 +169,8 @@ def main():
             #ビームが爆弾に当たったら両方消滅
                beam = None
                bomb = None
+               bird.change_img(6, screen)
+               pg.display.update()
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         if beam is not None:
