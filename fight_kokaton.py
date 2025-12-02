@@ -141,6 +141,9 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 class Score:
+    """
+    スコアに関するクラス
+    """
     def __init__(self):
         self.fonto = pg.font.SysFont("hgp創英角ポップ体", 30)
         self.color = (0,0,255)
@@ -158,6 +161,29 @@ class Score:
         self.img = self.fonto.render(f"score:{self.score}",0,self.color)
         screen.blit(self.img,(self.x,self.y))
 
+class Explosion:
+    """
+    """
+    def __init__(self,bomb):
+        """
+        """
+        self.imgs=[
+            pg.image.load(f"fig/explosion.gif"),
+            pg.flip(pg.image.load(f"fig/explosion.gif"))]
+        self.rct.center = bomb.rct.center #爆発の座標
+        self.life  #表示時間
+    
+    def update(self, screen: pg.Surface):
+        """
+        爆発エフェクト
+        引数screen :画面surface
+        """
+        self.life -= 1
+        if self.life > 0:
+            screen.blit(self.imgs,self.rct)
+
+        
+
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -168,6 +194,7 @@ def main():
     #bomb = Bomb((255, 0, 0), 10)
     bombs = []
     beams = []
+    explosions = []
     for _ in range(NUM_OF_BOMBS):
         bomb =  Bomb((255, 0, 0), 10) 
         bombs.append(bomb)
@@ -204,11 +231,12 @@ def main():
                    bombs[b] = None
                    bird.change_img(6, screen)
                    score.score += 1
+                   explosions.append(Explosion(bomb))
                    pg.display.update()
         
         bombs = [bomb for bomb in bombs if bomb is not None]
         beams = [beam for beam in beams if beam is not None]
-
+        explosions = [ex for ex in explosions if ex.life > 0]
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
 
@@ -219,6 +247,8 @@ def main():
             beam.update(screen) 
         for bomb in bombs:
             bomb.update(screen)
+        for ex in explosions:
+            ex.update(screen)
         score.update(screen)
         pg.display.update()
         tmr += 1
