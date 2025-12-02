@@ -142,6 +142,10 @@ class Bomb:
 
 class Score:
     def __init__(self):
+        """
+        フォントとsurfaseを生成する
+        引数なし
+        """
         self.fonto = pg.font.SysFont("hgp創英角ポップ体", 30)
         self.color = (0,0,255)
         self.score = 0
